@@ -10,9 +10,15 @@
   <!-- 启动z注解驱动的spring mvc功能 -->
   <mvc:annotation-driven/>
 
+  <mvc:interceptors>
+    <bean class="com.bw.common.HttpInterceptor" />
+  </mvc:interceptors>
+
   <!-- 启动包扫描功能 -->
   <context:component-scan base-package="com.bw.controller"/>
   <context:component-scan base-package="com.bw.service"/>
+
+  <bean class="com.bw.common.ApplicationContextHelper" lazy-init="false" />
 
   <!--<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>-->
 
