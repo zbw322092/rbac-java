@@ -126,6 +126,15 @@
       <version>1.7.25</version>
     </dependency>
 
+    <!-- jsp api -->
+    <!-- https://mvnrepository.com/artifact/org.apache.tomcat/tomcat-jsp-api -->
+    <dependency>
+      <groupId>org.apache.tomcat</groupId>
+      <artifactId>tomcat-jsp-api</artifactId>
+      <version>9.0.6</version>
+    </dependency>
+
+
 
   </dependencies>
   <build>

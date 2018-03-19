@@ -1,5 +1,7 @@
 package com.bw.controller;
 
+import com.bw.common.JsonData;
+import com.bw.exception.PermissionException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,11 +12,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Slf4j
 public class TestController {
 
-    @RequestMapping("/hello")
+    @RequestMapping("/hello.json")
     @ResponseBody
-    public String hello() {
+    public JsonData hello() {
         log.info("Hello There");
-        return "hello, RBAC System.";
+        throw new RuntimeException("test exception");
+//        return JsonData.success("hello");
     }
 
 }
