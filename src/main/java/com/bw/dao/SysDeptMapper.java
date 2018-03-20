@@ -1,6 +1,9 @@
 package com.bw.dao;
 
 import com.bw.model.SysDept;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface SysDeptMapper {
     /**
@@ -50,4 +53,12 @@ public interface SysDeptMapper {
      * @mbg.generated Sun Mar 18 23:30:03 CST 2018
      */
     int updateByPrimaryKey(SysDept record);
+
+    List<SysDept> getAllDept();
+
+    List<SysDept> getChildDeptListByLevel(@Param("level")String level);
+
+    void batchUpdateLevel(@Param("sysDeptList") List<SysDept> sysDeptList);
+
+    int countByNameAndParentId(@Param("parentId") Integer parentId, @Param("name") String name, @Param("id") Integer id);
 }
