@@ -9,6 +9,7 @@ import com.bw.util.LevelUtil;
 import com.google.common.base.Preconditions;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -43,20 +44,22 @@ public class SysDeptService {
         }
         SysDept before = sysDeptMapper.selectByPrimaryKey(param.getId());
         Preconditions.checkNotNull(before, "待更新的部门不存在");
-        if (checkExist( param.getParentId(), param.getName(), param.getParentId() )) {
+        if (checkExist( param.getParentId(), param.getName(), param.getId() )) {
             throw new ParamException("同一层级下存在相同名称的部门");
         }
 
         SysDept after = SysDept.builder().id(param.getId()).name(param.getName()).parentId(param.getParentId())
                 .seq(param.getSeq()).remark(param.getRemark()).build();
         after.setLevel(LevelUtil.calculateLevel( getLevel(param.getParentId()), param.getParentId() ));
-        after.setOperator("system"); // todo
+        after.setOperator("system-update"); // todo
         after.setOperateIp("127.0.0.1"); // todo
         after.setOperateTime(new Date()); // todo
 
+        updateWithChild(before, after);
     }
 
-    private void updateWithChild(SysDept before, SysDept after) {
+    @Transactional
+    public void updateWithChild(SysDept before, SysDept after) {
         String newLevelPrefix = after.getLevel();
         String oldLevelPrefix = before.getLevel();
 
