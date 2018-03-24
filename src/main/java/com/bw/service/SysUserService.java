@@ -1,5 +1,7 @@
 package com.bw.service;
 
+import com.bw.beans.PageQuery;
+import com.bw.beans.PageResult;
 import com.bw.dao.SysUserMapper;
 import com.bw.exception.ParamException;
 import com.bw.model.SysUser;
@@ -9,9 +11,11 @@ import com.bw.util.MD5Util;
 import com.bw.util.PasswordUtil;
 import com.google.common.base.Preconditions;
 import org.springframework.stereotype.Service;
+import sun.jvm.hotspot.debugger.Page;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class SysUserService {
@@ -60,10 +64,24 @@ public class SysUserService {
 
 
     public boolean checkEmailExist(String mail, Integer userId) {
-        return false;
+        return sysUserMapper.countByMail(mail, userId) > 0;
     }
 
-    public boolean checkTelephoneExist(String mail, Integer userId) {
-        return  false;
+    public boolean checkTelephoneExist(String telephone, Integer userId) {
+        return  sysUserMapper.countByTelephone(telephone, userId) > 0;
+    }
+
+    public SysUser findByKeyword(String keyword) {
+        return sysUserMapper.findByKeyword(keyword);
+    }
+
+    public PageResult<SysUser> getPageByDeptId(int deptId, PageQuery page) {
+        BeanValidator.check(page);
+        int count = sysUserMapper.countByDeptId(deptId);
+        if (count > 0) {
+            List<SysUser> list = sysUserMapper.getPageByDeptId(deptId, page);
+            return PageResult.<SysUser>builder().total(count).data(list).build();
+        }
+        return PageResult.<SysUser>builder().build();
     }
 }

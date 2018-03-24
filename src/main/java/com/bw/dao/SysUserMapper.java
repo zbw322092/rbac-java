@@ -1,6 +1,10 @@
 package com.bw.dao;
 
+import com.bw.beans.PageQuery;
 import com.bw.model.SysUser;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface SysUserMapper {
     /**
@@ -50,4 +54,14 @@ public interface SysUserMapper {
      * @mbg.generated Sun Mar 18 23:30:03 CST 2018
      */
     int updateByPrimaryKey(SysUser record);
+
+    SysUser findByKeyword(@Param("keyword") String keyword);
+
+    int countByMail(@Param("mail") String mail, @Param("id") Integer id);
+
+    int countByTelephone(@Param("telephone") String telephone, @Param("id") Integer id);
+
+    int countByDeptId(@Param("deptId") int deptId);
+
+    List<SysUser> getPageByDeptId(@Param("deptId") int deptId, @Param("page") PageQuery page);
 }
