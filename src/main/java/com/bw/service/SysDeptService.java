@@ -1,10 +1,12 @@
 package com.bw.service;
 
+import com.bw.common.RequestHolder;
 import com.bw.dao.SysDeptMapper;
 import com.bw.exception.ParamException;
 import com.bw.model.SysDept;
 import com.bw.param.DeptParam;
 import com.bw.util.BeanValidator;
+import com.bw.util.IpUtil;
 import com.bw.util.LevelUtil;
 import com.google.common.base.Preconditions;
 import org.apache.commons.collections.CollectionUtils;
@@ -31,8 +33,8 @@ public class SysDeptService {
                 .seq(param.getSeq()).remark(param.getRemark()).build();
 
         dept.setLevel(LevelUtil.calculateLevel( getLevel(param.getParentId()), param.getParentId()) );
-        dept.setOperator("system"); // todo
-        dept.setOperateIp("127.0.0.1"); // todo
+        dept.setOperator(RequestHolder.getCurrentUser().getUsername());
+        dept.setOperateIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequest()));
         dept.setOperateTime(new Date()); // todo
         sysDeptMapper.insertSelective(dept);
     }
@@ -51,8 +53,8 @@ public class SysDeptService {
         SysDept after = SysDept.builder().id(param.getId()).name(param.getName()).parentId(param.getParentId())
                 .seq(param.getSeq()).remark(param.getRemark()).build();
         after.setLevel(LevelUtil.calculateLevel( getLevel(param.getParentId()), param.getParentId() ));
-        after.setOperator("system-update"); // todo
-        after.setOperateIp("127.0.0.1"); // todo
+        after.setOperator(RequestHolder.getCurrentUser().getUsername());
+        after.setOperateIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequest()));
         after.setOperateTime(new Date()); // todo
 
         updateWithChild(before, after);

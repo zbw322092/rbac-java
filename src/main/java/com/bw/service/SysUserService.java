@@ -2,11 +2,13 @@ package com.bw.service;
 
 import com.bw.beans.PageQuery;
 import com.bw.beans.PageResult;
+import com.bw.common.RequestHolder;
 import com.bw.dao.SysUserMapper;
 import com.bw.exception.ParamException;
 import com.bw.model.SysUser;
 import com.bw.param.UserParam;
 import com.bw.util.BeanValidator;
+import com.bw.util.IpUtil;
 import com.bw.util.MD5Util;
 import com.bw.util.PasswordUtil;
 import com.google.common.base.Preconditions;
@@ -38,8 +40,8 @@ public class SysUserService {
 
         SysUser sysUser = SysUser.builder().username(param.getUsername()).telephone(param.getTelephone()).mail(param.getMail()).
                 password(encryptedPassword).deptId(param.getDeptId()).status(param.getStatus()).remark(param.getRemark()).build();
-        sysUser.setOperator("system"); // todo
-        sysUser.setOperateIp("127.0.0.1"); // todo
+        sysUser.setOperator(RequestHolder.getCurrentUser().getUsername());
+        sysUser.setOperateIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequest()));
         sysUser.setOperateTime(new Date()); // todo
 
         // TODO sendemail
@@ -59,6 +61,9 @@ public class SysUserService {
         Preconditions.checkNotNull(before, "待更新的用户不存在");
         SysUser after = SysUser.builder().id(param.getId()).username(param.getUsername()).telephone(param.getTelephone()).mail(param.getMail()).
                 deptId(param.getDeptId()).status(param.getStatus()).remark(param.getRemark()).build();
+        after.setOperator(RequestHolder.getCurrentUser().getUsername());
+        after.setOperateIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequest()));
+        after.setOperateTime(new Date()); // todo
         sysUserMapper.updateByPrimaryKeySelective(after);
     }
 
