@@ -1,6 +1,10 @@
 package com.bw.dao;
 
 import com.bw.model.SysAclModule;
+import com.bw.model.SysDept;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface SysAclModuleMapper {
     /**
@@ -50,4 +54,10 @@ public interface SysAclModuleMapper {
      * @mbg.generated Sun Mar 18 23:30:03 CST 2018
      */
     int updateByPrimaryKey(SysAclModule record);
+
+    List<SysAclModule> getChildAclModuleListByLevel(@Param("level")String level);
+
+    void batchUpdateLevel(@Param("sysAclModuleList") List<SysAclModule> sysAclModuleList);
+
+    int countByNameAndParentId(@Param("parentId") Integer parentId, @Param("name") String name, @Param("id") Integer id);
 }

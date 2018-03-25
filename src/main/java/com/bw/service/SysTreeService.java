@@ -1,5 +1,6 @@
 package com.bw.service;
 
+import com.bw.dao.SysAclModuleMapper;
 import com.bw.dao.SysDeptMapper;
 import com.bw.dto.DeptLevelDto;
 import com.bw.model.SysDept;
@@ -20,6 +21,9 @@ public class SysTreeService {
 
     @Resource
     private SysDeptMapper sysDeptMapper;
+
+    @Resource
+    private SysAclModuleMapper sysAclModuleMapper;
 
     public List<DeptLevelDto> deptTree() {
         List<SysDept> deptList = sysDeptMapper.getAllDept();
